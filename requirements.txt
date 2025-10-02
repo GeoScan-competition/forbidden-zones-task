@@ -1,0 +1,1 @@
+pioneer-sdk @ git+https://gitflic.ru/project/geoscan-llc/pioneer-sdk.git@simulator
