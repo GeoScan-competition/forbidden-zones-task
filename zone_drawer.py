@@ -219,37 +219,40 @@ class ZoneDrawerApp:
         return (p1[0] + best[0]*r, p1[1] + best[1]*r)
 
     def to_real(self, px, py):
-        xmin, ymin, xmax, ymax = self.bounds
-        x = xmin + px/self.canvas_w*(xmax-xmin)
-        y = ymax - py/self.canvas_h*(ymax-ymin)
+        y = self.y_max - px / self.canvas_w * (self.y_max - self.y_min)
+        x = self.x_max - py / self.canvas_h * (self.x_max - self.x_min)
         return (x, y)
 
     def to_canvas(self, x, y):
-        xmin, ymin, xmax, ymax = self.bounds
-        px = (x - xmin) / (xmax - xmin) * self.canvas_w
-        py = (ymax - y) / (ymax - ymin) * self.canvas_h
+        px = (self.y_max - y) / (self.y_max - self.y_min) * self.canvas_w
+        py = (self.x_max - x) / (self.x_max - self.x_min) * self.canvas_h
         return int(round(px)), int(round(py))
 
     def set_bounds(self):
         try:
-            xmin = -1500
-            ymin = -1200
-            xmax = 1500
-            ymax = 3700
+            self.x_min, self.x_max = -1200, 3700
+            self.y_min, self.y_max = -1500, 1500
         except ValueError:
             messagebox.showerror("Ошибка", "Введите числовые границы.")
             return
-        if xmax <= xmin or ymax <= ymin:
+
+        if self.x_max <= self.x_min or self.y_max <= self.y_min:
             messagebox.showerror("Ошибка", "Максимум должен быть больше минимума.")
             return
-        self.bounds = (xmin, ymin, xmax, ymax)
-        real_w, real_h = xmax - xmin, ymax - ymin
+
+        self.bounds = (self.x_min, self.y_min, self.x_max, self.y_max)
+
+        real_w = self.y_max - self.y_min
+        real_h = self.x_max - self.x_min
         aspect_ratio = real_w / real_h
+
         max_canvas_h = int(self.screen_h * 0.6)
         self.canvas_h = max_canvas_h
         self.canvas_w = max(200, int(self.canvas_h * aspect_ratio))
+
         for w in self.canvas_frame.winfo_children():
             w.destroy()
+
         self.canvas = tk.Canvas(self.canvas_frame, width=self.canvas_w, height=self.canvas_h, bg="white")
         self.canvas.pack()
         self.canvas.bind("<Button-1>", self.on_click)
@@ -353,7 +356,7 @@ class ZoneDrawerApp:
             self.draw_preview(cursor=cursor)
         if self.bounds:
             x, y = self.to_real(event.x, event.y)
-            self.coord_label.config(text=f"Курсор: {x*0.01:.2f} {y*0.01:.2f}")
+            self.coord_label.config(text=f"Курсор: x={x*0.01:.2f}  y={y*0.01:.2f}")
 
     def draw_preview(self, cursor=None):
         self.clear_preview()
