@@ -424,14 +424,14 @@ class ZoneDrawerApp:
         fx_s = fx * 0.01
         fy_s = fy * 0.01
         lines = [
-            f"{int(round(sx_s))} {int(round(sy_s))}",
-            f"{int(round(fx_s))} {int(round(fy_s))}",
+            f"{sx_s:.2f} {sy_s:.2f}",
+            f"{fx_s:.2f} {fy_s:.2f}",
             str(len(self.zones_px))
         ]
         for poly in self.zones_px:
             pts_real = [self.to_real(x, y) for x, y in poly]
             pts_scaled = [(x * 0.01, y * 0.01) for (x, y) in pts_real]
-            line = " ".join(f"{int(round(x))} {int(round(y))}" for x, y in pts_scaled)
+            line = " ".join(f"{x:.2f} {y:.2f}" for x, y in pts_scaled)
             lines.append(line)
         path = filedialog.asksaveasfilename(defaultextension='.txt', filetypes=[('Text files','*.txt')])
         if path:
