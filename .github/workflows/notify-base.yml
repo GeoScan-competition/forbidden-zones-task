@@ -15,5 +15,5 @@ jobs:
           curl -sS -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${GH_TOKEN}" \
-            https://api.github.com/repos/GeoScan-competition/chempbas-2025-qualify-forbidden-zones-task/dispatches \
+            https://api.github.com/repos/GeoScan-competition/chempbas-2025-final-forbidden-zones-task/dispatches \
             -d '{"event_type":"sync-template"}'
