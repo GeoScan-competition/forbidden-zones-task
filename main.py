@@ -16,4 +16,4 @@ if __name__ == "__main__":
     with open(zones_file, "r", encoding="utf-8") as f:
         f.read()
       
-    drone = Pioneer(ip=ip, mavlink_port=port)
+    drone = Pioneer(ip=ip, mavlink_port=port, simulator=True)
